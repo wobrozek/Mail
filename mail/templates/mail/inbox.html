@@ -15,6 +15,27 @@
         
     </div>
 
+    <div id="email-show" class="email-show">
+        <div class="email-show-wraper flex-column">
+            <h2 data-email="subject"></h2>
+            <div class="flex-space-between">
+                <div class="flex">
+                    <div data-email="sender">From :</div>
+                    <div data-email="recipients"> To :</div>
+                </div>
+                <div data-email="timestamp" ></div>
+            </div>
+            <div data-email="body" class="flex-grow"></div>
+            <div class="flex email-footer">
+                <div class="archive">
+                    <img class="icon icon-trash" src="https://cdn-icons-png.flaticon.com/512/2891/2891491.png" alt="" />
+                </div>
+                <div class="reply">
+                    <img  class="icon icon-reply" src="https://cdn-icons-png.flaticon.com/512/624/624980.png" alt="" />
+                </div>
+            </div>
+    </div>
+
     <div id="compose-view">
         <h3>New Email</h3>
         <form id="compose-form">

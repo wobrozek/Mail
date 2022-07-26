@@ -58,25 +58,26 @@ function load(emails) {
 	for (email of emails) {
 		const element = document.createElement('div');
 		element.className = 'email';
-		element.innerHTML = `<div class="flex-column">
-      <div class="subject">Title: ${email.subject}</div>
-      <div class="sender">From: ${email.sender}</div>
-    </div>
-
-    <div class="flex-column">
-      <div class="timestamp">${email.timestamp}</div>
-      <div class="flex">
-        <div class="archive">
-          <img class="icon icon-trash" src="https://cdn-icons-png.flaticon.com/512/2891/2891491.png" alt="" />
-        </div>
-        <div class="reply">
-          <img  class="icon icon-reply" src="https://cdn-icons-png.flaticon.com/512/624/624980.png" alt="" />
-        </div>
+		element.innerHTML = `
+      <div class="flex-column">
+        <div class="subject">Title: ${email.subject}</div>
+        <div class="sender">From: ${email.sender}</div>
       </div>
-    </div>`;
 
-		element.addEventListener('click', function() {
-			console.log('This element has been clicked!');
+      <div class="flex-column">
+        <div class="timestamp">${email.timestamp}</div>
+        <div class="flex">
+          <div class="archive">
+            <img class="icon icon-trash" src="https://cdn-icons-png.flaticon.com/512/2891/2891491.png" alt="" />
+          </div>
+          <div class="reply">
+            <img  class="icon icon-reply" src="https://cdn-icons-png.flaticon.com/512/624/624980.png" alt="" />
+          </div>
+        </div>
+      </div>`;
+
+		element.addEventListener('click', () => {
+			element.classList.toggle('active');
 		});
 
 		document.querySelector('#emails-view').append(element);

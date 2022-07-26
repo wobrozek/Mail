@@ -3,20 +3,41 @@ textarea {
 }
 
 .icon{
-    width: 20px;
+    height: 20px;
     margin-right: 10px;
 }
+
+.email-show{
+    position: fixed;
+    left: 0;
+    top:0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color:rgba(164, 176, 190,0.8);
+}
+
+.email-show-wraper{
+    background-color: #fff;
+    width: 500px;
+    min-height: 500px;
+    padding: 10px;
+    border-radius: 20px;
+}     
 
 .email{
     display: flex;
     padding: 10px;
     border: 1px solid #000;
-    border-bottom: 0;
     justify-content: space-between;
+    margin: 10px;
 }
 
-.email:last-child{
-    border-bottom: 1px solid #000;
+.email-footer{
+height: 20px;
+margin: 20px;
 }
 
 .flex{
@@ -27,4 +48,13 @@ textarea {
 .flex-column{
     display: flex;
     flex-direction: column;
+}
+
+.flex-grow{
+    flex-grow:1;
+}
+
+.flex-space-between{
+    display: flex;
+    justify-content: space-between;
 }
