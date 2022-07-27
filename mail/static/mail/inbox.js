@@ -58,8 +58,9 @@ function load(emails) {
 	for (email of emails) {
 		const element = document.createElement('div');
 		element.className = 'email';
+		element.id = email.id;
 		element.innerHTML = `
-      <div class="flex-column">
+      <div class="flex-column" >
         <div class="subject">Title: ${email.subject}</div>
         <div class="sender">From: ${email.sender}</div>
       </div>
@@ -76,10 +77,34 @@ function load(emails) {
         </div>
       </div>`;
 
-		element.addEventListener('click', () => {
-			element.classList.toggle('active');
-		});
+		element.addEventListener('click', popup);
 
 		document.querySelector('#emails-view').append(element);
 	}
+}
+//schow email after onclick
+function popup(event) {
+	const emailShow = document.querySelector('#email-show');
+	const emailShowWraper = document.querySelector('#email-show-wraper');
+
+	emailShow.style.display = 'flex';
+	load_data(event);
+	emailShow.addEventListener('click', () => {
+		emailShow.style.display = 'none';
+		console.log(event);
+	});
+
+	//if you click on a mail popup still will be displayed
+	emailShowWraper.addEventListener('click', (e) => {
+		e.stopPropagation();
+	});
+}
+
+function load_data(event) {
+	id = event.target.id;
+	fetch(`/emails/${id}`).then((response) => response.json()).then((email) => {
+		document.querySelectorAll('.data').forEach((element) => {
+			element.innerHTML = email[element.dataset.email];
+		});
+	});
 }

@@ -16,16 +16,16 @@
     </div>
 
     <div id="email-show" class="email-show">
-        <div class="email-show-wraper flex-column">
-            <h2 data-email="subject"></h2>
+        <div id="email-show-wraper"class="email-show-wraper flex-column">
+            <h2 data-email="subject" class="data"></h2>
             <div class="flex-space-between">
-                <div class="flex">
-                    <div data-email="sender">From :</div>
-                    <div data-email="recipients"> To :</div>
+                <div class="flex-column">
+                    <div>From: <span data-email="sender" class="data"></span></div>
+                    <div>  To: <span data-email="recipients" class="data"></span></div>
                 </div>
-                <div data-email="timestamp" ></div>
+                <div data-email="timestamp" class="data" ></div>
             </div>
-            <div data-email="body" class="flex-grow"></div>
+            <div data-email="body" class="flex-grow data"></div>
             <div class="flex email-footer">
                 <div class="archive">
                     <img class="icon icon-trash" src="https://cdn-icons-png.flaticon.com/512/2891/2891491.png" alt="" />
