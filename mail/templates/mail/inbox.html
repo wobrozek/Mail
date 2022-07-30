@@ -13,8 +13,7 @@
     <div id="emails-view">
         
     </div>
-
-
+    
     {% comment %} email popup {% endcomment %}
     <div id="email-show" class="email-show email-id" >
         <div id="email-show-wraper"class="email-show-wraper flex-column">
@@ -27,22 +26,16 @@
                 <div data-email="timestamp" class="data" ></div>
             </div>
             <div data-email="body" class="flex-grow data"></div>
-            <div class="flex email-footer">
-                <div class="archive">
-                    <img class="icon icon-trash" src="https://cdn-icons-png.flaticon.com/512/2891/2891491.png" alt="" />
-                </div>
-                <div class="reply">
-                    <img  class="icon icon-reply" src="https://cdn-icons-png.flaticon.com/512/624/624980.png" alt="" />
-                </div>
+            <div id="email-buttons" class="flex email-footer">
             </div>
         </div>
-    </div>
-
+    </div>       
+            
     <div id="compose-view">
         <h3>New Email</h3>
         <form id="compose-form">
             <div class="form-group">
-                From: <input disabled class="form-control" value="{{ request.user.email }}">
+                From: <input disabled class="form-control" id="compose-user" value="{{ request.user.email }}">
             </div>
             <div class="form-group">
                 To: <input id="compose-recipients" class="form-control">

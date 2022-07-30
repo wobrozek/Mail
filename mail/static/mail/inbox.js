@@ -60,14 +60,15 @@ function load_mailbox(mailbox) {
 function load(emails, mailbox) {
 	for (email of emails) {
 		const element = document.createElement('div');
+		const curentUser = document.querySelector('#compose-user').value;
 		element.className = 'email email-id';
 		element.dataset.id = email.id;
-		emailHTML = `
+		var emailHTML = `
       <div class="flex-column" >
         <div class="subject">Title: ${email.subject}</div>`;
 
 		//if user is sender display recipients or vice versa
-		if (email.user == email.sender) {
+		if (curentUser == email.sender) {
 			emailHTML += `<div class="recipients">To: ${email.recipients}</div>`;
 		} else {
 			emailHTML += `<div class="sender">From: ${email.sender}</div>`;
@@ -79,26 +80,14 @@ function load(emails, mailbox) {
         <div class="timestamp">${email.timestamp}</div>
         <div class="flex">`;
 
-		if (mailbox != 'archive') {
-			emailHTML += `<img class="icon icon-archive" src="https://cdn-icons-png.flaticon.com/512/2891/2891491.png" alt="" />`;
-		} else {
-			emailHTML += `<img class="icon icon-unArchive" src="https://static.thenounproject.com/png/829241-200.png" alt="" />`;
-		}
-
-		emailHTML += `
-        <div class="reply">`;
-
-		if (email.user != email.sender) {
-			emailHTML += `
-				<img class="icon icon-reply" src="https://cdn-icons-png.flaticon.com/512/624/624980.png" alt="" />`;
-		}
+		emailHTML += buttonsHTML(mailbox);
 
 		emailHTML += `
         </div>
       </div>
     </div>`;
 		element.innerHTML = emailHTML;
-		element.addEventListener('click', popup);
+		element.addEventListener('click', (e) => popup(e, mailbox));
 
 		document.querySelector('#emails-view').append(element);
 	}
@@ -110,20 +99,40 @@ function load(emails, mailbox) {
 	});
 
 	document.querySelectorAll('.icon-archive').forEach(function(icon) {
-		icon.onclick = (e) => iconArchive(e, true);
+		icon.onclick = (e) => iconArchive(e, true, mailbox);
 	});
 
 	document.querySelectorAll('.icon-unArchive').forEach(function(icon) {
-		icon.onclick = (e) => iconArchive(e, false);
+		icon.onclick = (e) => iconArchive(e, false, mailbox);
 	});
 }
 //schow email after onclick
-function popup(event) {
+function popup(event, mailbox) {
 	const emailShow = document.querySelector('#email-show');
 	const emailShowWraper = document.querySelector('#email-show-wraper');
 
 	emailShow.style.display = 'flex';
 	load_data(event);
+
+	//create butons and add listeners
+	document.querySelector('#email-buttons').innerHTML = buttonsHTML(mailbox);
+
+	var replyButton = document.querySelectorAll('#email-buttons .icon-reply');
+	var archiveButton = document.querySelectorAll('#email-buttons .icon-archive');
+	var unArchiveButton = document.querySelectorAll('#email-buttons .icon-unArchive');
+
+	if (replyButton[0] != null) {
+		replyButton[0].onclick = iconReply;
+	}
+
+	if (archiveButton[0] != null) {
+		archiveButton[0].onclick = (e) => iconArchive(e, true, mailbox);
+	}
+
+	if (unArchiveButton[0] != null) {
+		unArchiveButton[0].onclick = (e) => iconArchive(e, false, mailbox);
+	}
+
 	emailShow.addEventListener('click', () => {
 		emailShow.style.display = 'none';
 		console.log(event);
@@ -149,7 +158,7 @@ function load_data(event) {
 //buttons
 
 //use true to archive or false to unArchive
-function iconArchive(e, bool) {
+function iconArchive(e, bool, mailbox = 'inbox') {
 	e.stopPropagation();
 	id = e.target.closest('.email-id').dataset.id;
 
@@ -165,10 +174,12 @@ function iconArchive(e, bool) {
 			console.log(result);
 		});
 
-	load_mailbox('inbox');
+	document.querySelector('#email-show').style.display = 'none';
+	load_mailbox(mailbox);
 }
 
 function iconReply(e) {
+	console.log('kliknieto przycisk');
 	e.stopPropagation();
 	id = e.target.closest('.email-id').dataset.id;
 
@@ -179,8 +190,27 @@ function iconReply(e) {
 	});
 }
 
+//print archive and reply buttons
+function buttonsHTML(mailbox) {
+	var buttonsHTML = '';
+	if (mailbox == 'sent') {
+		buttonsHTML = '';
+	}
+
+	if (mailbox == 'archive') {
+		buttonsHTML = `<img class="icon icon-unArchive" src="https://static.thenounproject.com/png/829241-200.png" alt="" />
+			<img class="icon icon-reply" src="https://cdn-icons-png.flaticon.com/512/624/624980.png" alt="" />`;
+	}
+
+	if (mailbox == 'inbox') {
+		buttonsHTML = `<img class="icon icon-archive" src="https://cdn-icons-png.flaticon.com/512/2891/2891491.png" alt="" />
+			<img class="icon icon-reply" src="https://cdn-icons-png.flaticon.com/512/624/624980.png" alt="" />`;
+	}
+
+	return buttonsHTML;
+}
+
 //todo:
-// -archiwizacja
-// -poprawic by butonow odpowiedzi nie bylo w wylanych bo bez sensu
 // -czy email zostal przeczytany zmiana tla
 // -walidacja formularza i wyswietlanie bledow
+// -undefine gdy klikniesz napis
