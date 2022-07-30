@@ -176,7 +176,7 @@ function popup(event, mailbox) {
 
 //load data to popup
 function load_data(event) {
-	idEvent = event.target.dataset.id;
+	idEvent = event.target.closest('.email-id').dataset.id;
 	document.querySelector('#email-show').dataset.id = idEvent;
 	fetch(`/emails/${idEvent}`).then((response) => response.json()).then((email) => {
 		document.querySelectorAll('.data').forEach((element) => {
@@ -241,7 +241,6 @@ function buttonsHTML(mailbox) {
 }
 
 //todo:
-// -walidacja formularza i wyswietlanie bledow
 // -undefine gdy klikniesz napis
 // -szybkie klikniecia powoduja stakowanie meili
 // -animacje
