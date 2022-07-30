@@ -62,6 +62,9 @@ function load(emails, mailbox) {
 		const element = document.createElement('div');
 		const curentUser = document.querySelector('#compose-user').value;
 		element.className = 'email email-id';
+		if (email.read) {
+			element.className += ' email-read ';
+		}
 		element.dataset.id = email.id;
 		var emailHTML = `
       <div class="flex-column" >
@@ -142,6 +145,21 @@ function popup(event, mailbox) {
 	emailShowWraper.addEventListener('click', (e) => {
 		e.stopPropagation();
 	});
+
+	//mark mail as read
+	fetch(`/emails/${event.target.dataset.id}`, {
+		method: 'PUT',
+		body: JSON.stringify({
+			read: true
+		})
+	})
+		.then((response) => response.json())
+		.then((result) => {
+			// Print result
+			console.log(result);
+		});
+
+	event.target.className += ' email-read ';
 }
 
 //load data to popup
@@ -211,6 +229,6 @@ function buttonsHTML(mailbox) {
 }
 
 //todo:
-// -czy email zostal przeczytany zmiana tla
 // -walidacja formularza i wyswietlanie bledow
 // -undefine gdy klikniesz napis
+// -szybkie klikniecia powoduja stakowanie meili

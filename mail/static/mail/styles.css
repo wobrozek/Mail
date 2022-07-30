@@ -27,12 +27,17 @@ textarea {
     border-radius: 20px;
 }     
 
+
 .email{
     display: flex;
     padding: 10px;
     border: 1px solid #000;
     justify-content: space-between;
     margin: 10px;
+}
+
+.email-read{
+    background-color:#dfe4ea;
 }
 
 .email-footer{
