@@ -52,45 +52,69 @@ function load_mailbox(mailbox) {
 	fetch(`/emails/${mailbox}`).then((response) => response.json()).then((emails) => {
 		console.log(emails);
 
-		load(emails);
+		load(emails, mailbox);
 	});
 }
 
 //show emails in inbox
-function load(emails) {
+function load(emails, mailbox) {
 	for (email of emails) {
 		const element = document.createElement('div');
 		element.className = 'email email-id';
 		element.dataset.id = email.id;
-		element.innerHTML = `
+		emailHTML = `
       <div class="flex-column" >
-        <div class="subject">Title: ${email.subject}</div>
-        <div class="sender">From: ${email.sender}</div>
-      </div>
+        <div class="subject">Title: ${email.subject}</div>`;
 
+		//if user is sender display recipients or vice versa
+		if (email.user == email.sender) {
+			emailHTML += `<div class="recipients">To: ${email.recipients}</div>`;
+		} else {
+			emailHTML += `<div class="sender">From: ${email.sender}</div>`;
+		}
+
+		emailHTML += ` 
+      </div>
       <div class="flex-column">
         <div class="timestamp">${email.timestamp}</div>
-        <div class="flex">
-          <div class="archive">
-            <img class="icon icon-trash" src="https://cdn-icons-png.flaticon.com/512/2891/2891491.png" alt="" />
-          </div>
-          <div class="reply">
-            <img  class="icon icon-reply" src="https://cdn-icons-png.flaticon.com/512/624/624980.png" alt="" />
-          </div>
-        </div>
-      </div>`;
+        <div class="flex">`;
 
+		if (mailbox != 'archive') {
+			emailHTML += `<img class="icon icon-archive" src="https://cdn-icons-png.flaticon.com/512/2891/2891491.png" alt="" />`;
+		} else {
+			emailHTML += `<img class="icon icon-unArchive" src="https://static.thenounproject.com/png/829241-200.png" alt="" />`;
+		}
+
+		emailHTML += `
+        <div class="reply">`;
+
+		if (email.user != email.sender) {
+			emailHTML += `
+				<img class="icon icon-reply" src="https://cdn-icons-png.flaticon.com/512/624/624980.png" alt="" />`;
+		}
+
+		emailHTML += `
+        </div>
+      </div>
+    </div>`;
+		element.innerHTML = emailHTML;
 		element.addEventListener('click', popup);
 
 		document.querySelector('#emails-view').append(element);
 	}
+
 	// add onclick to all buttons
+
 	document.querySelectorAll('.icon-reply').forEach(function(icon) {
 		icon.addEventListener('click', iconReply);
 	});
 
-	document.querySelectorAll('.icon-trash').forEach(function(icon) {
-		icon.onclick = iconDelete;
+	document.querySelectorAll('.icon-archive').forEach(function(icon) {
+		icon.onclick = (e) => iconArchive(e, true);
+	});
+
+	document.querySelectorAll('.icon-unArchive').forEach(function(icon) {
+		icon.onclick = (e) => iconArchive(e, false);
 	});
 }
 //schow email after onclick
@@ -124,9 +148,24 @@ function load_data(event) {
 
 //buttons
 
-function iconDelete(e) {
+//use true to archive or false to unArchive
+function iconArchive(e, bool) {
 	e.stopPropagation();
 	id = e.target.closest('.email-id').dataset.id;
+
+	fetch(`/emails/${id}`, {
+		method: 'PUT',
+		body: JSON.stringify({
+			archived: bool
+		})
+	})
+		.then((response) => response.json())
+		.then((result) => {
+			// Print result
+			console.log(result);
+		});
+
+	load_mailbox('inbox');
 }
 
 function iconReply(e) {
@@ -143,5 +182,5 @@ function iconReply(e) {
 //todo:
 // -archiwizacja
 // -poprawic by butonow odpowiedzi nie bylo w wylanych bo bez sensu
-// -czy emial zostal przeczytany zmiana tla
+// -czy email zostal przeczytany zmiana tla
 // -walidacja formularza i wyswietlanie bledow
