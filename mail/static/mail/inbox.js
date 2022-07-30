@@ -19,11 +19,13 @@ function compose_email(e, recipients = '', subject = '', body = '') {
 	document.querySelector('#compose-recipients').value = recipients;
 	document.querySelector('#compose-subject').value = subject;
 	document.querySelector('#compose-body').value = body;
+	document.querySelector('#invalid-recipients').style.display = 'none';
+	document.querySelector('#empty-recipients').style.display = 'none';
 
 	//sent email
 
-	document.querySelector('#compose-submit').onclick = () => {
-		// TODO obsługa bledu gdy odbiorca meilu nie istnieje
+	document.querySelector('#compose-submit').onclick = (e) => {
+		e.preventDefault();
 		fetch('/emails', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -34,8 +36,18 @@ function compose_email(e, recipients = '', subject = '', body = '') {
 		})
 			.then((response) => response.json())
 			.then((result) => {
-				// Print result
-				console.log(result);
+				console.log(result.message);
+				if (result.message == 'Email sent successfully.') {
+					load_mailbox('sent');
+				} else {
+					if (document.querySelector('#compose-recipients').value == '') {
+						document.querySelector('#empty-recipients').style.display = 'block';
+						document.querySelector('#invalid-recipients').style.display = 'none';
+					} else {
+						document.querySelector('#invalid-recipients').style.display = 'block';
+						document.querySelector('#empty-recipients').style.display = 'none';
+					}
+				}
 			});
 	};
 }
@@ -232,3 +244,4 @@ function buttonsHTML(mailbox) {
 // -walidacja formularza i wyswietlanie bledow
 // -undefine gdy klikniesz napis
 // -szybkie klikniecia powoduja stakowanie meili
+// -animacje
