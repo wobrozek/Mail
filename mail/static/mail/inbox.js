@@ -9,17 +9,19 @@ document.addEventListener('DOMContentLoaded', function() {
 	load_mailbox('inbox');
 });
 
-function compose_email() {
+function compose_email(e, recipients = '', subject = '', body = '') {
 	// Show compose view and hide other views
 	document.querySelector('#emails-view').style.display = 'none';
+	document.querySelector('#email-show').style.display = 'none';
 	document.querySelector('#compose-view').style.display = 'block';
 
 	// Clear out composition fields
-	document.querySelector('#compose-recipients').value = '';
-	document.querySelector('#compose-subject').value = '';
-	document.querySelector('#compose-body').value = '';
+	document.querySelector('#compose-recipients').value = recipients;
+	document.querySelector('#compose-subject').value = subject;
+	document.querySelector('#compose-body').value = body;
 
 	//sent email
+
 	document.querySelector('#compose-submit').onclick = () => {
 		// TODO obsługa bledu gdy odbiorca meilu nie istnieje
 		fetch('/emails', {
@@ -54,11 +56,12 @@ function load_mailbox(mailbox) {
 	});
 }
 
+//show emails in inbox
 function load(emails) {
 	for (email of emails) {
 		const element = document.createElement('div');
-		element.className = 'email';
-		element.id = email.id;
+		element.className = 'email email-id';
+		element.dataset.id = email.id;
 		element.innerHTML = `
       <div class="flex-column" >
         <div class="subject">Title: ${email.subject}</div>
@@ -81,6 +84,14 @@ function load(emails) {
 
 		document.querySelector('#emails-view').append(element);
 	}
+	// add onclick to all buttons
+	document.querySelectorAll('.icon-reply').forEach(function(icon) {
+		icon.addEventListener('click', iconReply);
+	});
+
+	document.querySelectorAll('.icon-trash').forEach(function(icon) {
+		icon.onclick = iconDelete;
+	});
 }
 //schow email after onclick
 function popup(event) {
@@ -100,11 +111,37 @@ function popup(event) {
 	});
 }
 
+//load data to popup
 function load_data(event) {
-	id = event.target.id;
-	fetch(`/emails/${id}`).then((response) => response.json()).then((email) => {
+	idEvent = event.target.dataset.id;
+	document.querySelector('#email-show').dataset.id = idEvent;
+	fetch(`/emails/${idEvent}`).then((response) => response.json()).then((email) => {
 		document.querySelectorAll('.data').forEach((element) => {
 			element.innerHTML = email[element.dataset.email];
 		});
 	});
 }
+
+//buttons
+
+function iconDelete(e) {
+	e.stopPropagation();
+	id = e.target.closest('.email-id').dataset.id;
+}
+
+function iconReply(e) {
+	e.stopPropagation();
+	id = e.target.closest('.email-id').dataset.id;
+
+	fetch(`/emails/${id}`).then((response) => response.json()).then((email) => {
+		let subject = `Re: ${email.subject}`;
+		let body = `On ${email.timestamp} ${email.sender} Wrote: ${email.body}`;
+		compose_email(e, email.sender, subject, body);
+	});
+}
+
+//todo:
+// -archiwizacja
+// -poprawic by butonow odpowiedzi nie bylo w wylanych bo bez sensu
+// -czy emial zostal przeczytany zmiana tla
+// -walidacja formularza i wyswietlanie bledow
