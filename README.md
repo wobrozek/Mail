@@ -14,5 +14,5 @@ python manage.py makemigrations mail
 python manage.py migrate
 python manage.py runserver
 ```
- Note that the emails you’ll be sending and receiving using this project will be entirely stored in your database (they won’t actually be sent to real email servers)
+ Note that the emails you’ll be sending and receiving using this project will be entirely stored in database created by django on your computer (they won’t actually be sent to real email servers)
 
