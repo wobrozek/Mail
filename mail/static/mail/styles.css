@@ -1,3 +1,4 @@
+
 textarea {
     min-height: 400px;
 }
@@ -29,11 +30,17 @@ textarea {
 
 
 .email{
+    box-sizing: border-box;
     display: flex;
     padding: 10px;
     border: 1px solid #000;
     justify-content: space-between;
     margin: 10px;
+
+    animation-name: delete;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
 }
 
 .email-read{
@@ -67,3 +74,31 @@ margin: 20px;
 nav{
     padding: 20px;
 }
+
+@keyframes delete {
+    0% {
+        opacity: 1;
+        padding: 10px;
+        margin: 10px;
+        line-height: normal;
+        max-height: 70px;
+        bor
+    }
+
+    50%{
+        opacity: 0;
+        padding: 10px;
+        margin: 10px;
+        line-height: normal;
+        max-height: 70px;
+        border-width: 1;
+    }
+
+    100% {
+        opacity: 0;
+        padding: 0px;
+        margin: 0px;
+        line-height: 0px;
+        max-height: 0px;
+        border-width: 0;
+    }

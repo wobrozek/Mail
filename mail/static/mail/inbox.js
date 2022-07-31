@@ -74,6 +74,7 @@ function load(emails, mailbox) {
 		const element = document.createElement('div');
 		const curentUser = document.querySelector('#compose-user').value;
 		element.className = 'email email-id';
+		element.id = `email${email.id}`;
 		if (email.read) {
 			element.className += ' email-read ';
 		}
@@ -114,11 +115,11 @@ function load(emails, mailbox) {
 	});
 
 	document.querySelectorAll('.icon-archive').forEach(function(icon) {
-		icon.onclick = (e) => iconArchive(e, true, mailbox);
+		icon.onclick = (e) => iconArchive(e, true);
 	});
 
 	document.querySelectorAll('.icon-unArchive').forEach(function(icon) {
-		icon.onclick = (e) => iconArchive(e, false, mailbox);
+		icon.onclick = (e) => iconArchive(e, false);
 	});
 }
 //schow email after onclick
@@ -141,11 +142,11 @@ function popup(event, mailbox) {
 	}
 
 	if (archiveButton[0] != null) {
-		archiveButton[0].onclick = (e) => iconArchive(e, true, mailbox);
+		archiveButton[0].onclick = (e) => iconArchive(e, true);
 	}
 
 	if (unArchiveButton[0] != null) {
-		unArchiveButton[0].onclick = (e) => iconArchive(e, false, mailbox);
+		unArchiveButton[0].onclick = (e) => iconArchive(e, false);
 	}
 
 	emailShow.addEventListener('click', () => {
@@ -188,7 +189,7 @@ function load_data(event) {
 //buttons
 
 //use true to archive or false to unArchive
-function iconArchive(e, bool, mailbox = 'inbox') {
+function iconArchive(e, bool) {
 	e.stopPropagation();
 	id = e.target.closest('.email-id').dataset.id;
 
@@ -205,7 +206,11 @@ function iconArchive(e, bool, mailbox = 'inbox') {
 		});
 
 	document.querySelector('#email-show').style.display = 'none';
-	load_mailbox(mailbox);
+	var mail = document.querySelector(`#email${id}`);
+	mail.style.animationPlayState = 'Running';
+	mail.addEventListener('animationend', () => {
+		mail.remove();
+	});
 }
 
 function iconReply(e) {
@@ -241,6 +246,7 @@ function buttonsHTML(mailbox) {
 }
 
 //todo:
-// -undefine gdy klikniesz napis
 // -szybkie klikniecia powoduja stakowanie meili
 // -animacje
+// -wyglad
+// -read me
