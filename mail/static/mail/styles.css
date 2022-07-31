@@ -52,6 +52,10 @@ height: 20px;
 margin: 20px;
 }
 
+.email-body{
+    padding: 10px;
+}
+
 .flex{
     display: flex;
     justify-content: space-around;

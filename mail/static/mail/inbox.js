@@ -76,7 +76,7 @@ function load(emails, mailbox) {
 		element.className = 'email email-id';
 		element.id = `email${email.id}`;
 		if (email.read) {
-			element.className += ' email-read ';
+			element.classList.add('email-read');
 		}
 		element.dataset.id = email.id;
 		var emailHTML = `
@@ -172,7 +172,7 @@ function popup(event, mailbox) {
 			console.log(result);
 		});
 
-	event.target.className += ' email-read ';
+	event.target.classList.add('email-read');
 }
 
 //load data to popup
@@ -247,6 +247,5 @@ function buttonsHTML(mailbox) {
 
 //todo:
 // -szybkie klikniecia powoduja stakowanie meili
-// -animacje
 // -wyglad
 // -read me
