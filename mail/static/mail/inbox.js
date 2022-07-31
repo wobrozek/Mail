@@ -244,8 +244,3 @@ function buttonsHTML(mailbox) {
 
 	return buttonsHTML;
 }
-
-//todo:
-// -szybkie klikniecia powoduja stakowanie meili
-// -wyglad
-// -read me
